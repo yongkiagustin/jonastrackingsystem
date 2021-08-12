@@ -46,7 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
         Button regisBtn = findViewById(R.id.register_regisbtn);
         etnama = findViewById(R.id.etnama);
         etnowa = findViewById(R.id.etnowa);
-        etemail = findViewById(R.id.register_etemail);
+        etemail = findViewById(R.id.etemail);
         etpassword = findViewById(R.id.register_etpassword);
         etrepassword = findViewById(R.id.register_etrepassword);
 

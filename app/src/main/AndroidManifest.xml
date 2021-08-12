@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="id.yongki.jonastrackingsystem" >
+    package="id.yongki.jonastrackingsystem">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -14,9 +14,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.JonasTrackingSystem" >
-        <activity android:name=".ProfileActivity" >
-        </activity>
+        android:theme="@style/Theme.JonasTrackingSystem">
+        <activity
+            android:name=".PraLoginActivity"
+            android:theme="@style/Theme.JonasTrackingSystem.NoActionBar"/>
+        <activity android:name=".ProfileActivity"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -26,13 +28,13 @@
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
-            android:name="com.google.android.geo.API_KEY,com.google.mlkit.vision.DEPENDENCIES"
-            android:value="AIzaSyDNPhY-65wKGaVQASqTHDG1A1DXOmC_ps8,face" />
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
-            android:theme="@style/Theme.JonasTrackingSystem"/>
+            android:theme="@style/Theme.JonasTrackingSystem" />
         <activity android:name=".MainActivity" />
         <activity android:name=".LupaPasswordActivity" />
         <activity
@@ -40,7 +42,7 @@
             android:theme="@style/Theme.JonasTrackingSystem.NoActionBar" />
         <activity
             android:name=".Splash"
-            android:theme="@style/Theme.JonasTrackingSystem.NoActionBar" >
+            android:theme="@style/Theme.JonasTrackingSystem.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

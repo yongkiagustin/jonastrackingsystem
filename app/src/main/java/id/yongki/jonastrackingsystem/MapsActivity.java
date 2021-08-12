@@ -1,21 +1,32 @@
 package id.yongki.jonastrackingsystem;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,28 +49,34 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
+import static java.security.AccessController.getContext;
+
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mMap;
-    FirebaseAuth firebaseAuth;
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private DatabaseReference reference;
     private LocationManager manager;
     private final int MIN_TIME = 1000;
-    private final int MIN_DISTANCE =1; //meter
+    private final int MIN_DISTANCE = 1; //meter
+    private static final int interval = 400; //milisecond
+    private MediaPlayer mediaPlayer;
     Marker myMarker;
 
     boolean flag = false;
     private TextView statusMata, kondisi;
     CameraSource cameraSource;
+    long lastUpdate;
+    long curenttime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         manager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-
 
         reference = FirebaseDatabase.getInstance("https://jonas-tracking-system-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference().child("Users");
 
@@ -69,6 +86,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         getLocationUpdate();
         readChanges();
+
+//        Face detection
+        statusMata = findViewById(R.id.tv_mata);
+        curenttime = 0;
+        lastUpdate = 0;
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
+            Toast.makeText(this, "Permission not granted!\n Grant permission and restart app", Toast.LENGTH_SHORT).show();
+        } else {
+            init();
+        }
+
+        // ALARM
+
+        final AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        int a = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)(a), 0);
+
     }
 
     private void readChanges() {
@@ -76,11 +111,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 myMarker.remove();
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     try {
 
                         MyLocation location = dataSnapshot.getValue(MyLocation.class);
-                        if(location != null){
+                        if (location != null) {
 
                             LatLng marker = new LatLng(location.getLatitude(), location.getLongitude());
                             myMarker = mMap.addMarker(new MarkerOptions().position(marker));
@@ -89,11 +124,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             mMap.getUiSettings().setAllGesturesEnabled(false);
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(marker));
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         Toast.makeText(MapsActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
@@ -101,15 +137,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void getLocationUpdate() {
-        if(manager !=null){
-            if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                if(manager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-                    manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE,this);
-                }else if(manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-                    manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE,this);
+        if (manager != null) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+                } else if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                    manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
 
-                }else{
+                } else {
                     AlertDialog alertDialog = new AlertDialog.Builder(MapsActivity.this).create();
                     alertDialog.setTitle("GPS Tidak Aktif");
                     alertDialog.setMessage("Mohon Aktifkan GPS Anda");
@@ -123,8 +159,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             });
                     alertDialog.show();
                 }
-            }else{
-                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
             }
 
         }
@@ -133,10 +169,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode ==101){
+        if (requestCode == 101) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLocationUpdate();
-            }else{
+            } else {
                 Toast.makeText(this, "Permission Required", Toast.LENGTH_LONG).show();
             }
         }
@@ -166,21 +202,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.getUiSettings().setAllGesturesEnabled(true);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(bandung));
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
-            Toast.makeText(this, "Permission not granted!\n Grant permission and restart app", Toast.LENGTH_SHORT).show();
-        }else{
-            init();
-        }
 
     }
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        if(location != null){
+        if (location != null) {
             saveLocation(location);
 
-        }else{
+        } else {
             Toast.makeText(this, "Tidak Ada Lokasi", Toast.LENGTH_LONG).show();
         }
     }
@@ -211,6 +241,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return super.onOptionsItemSelected(item);
     }
 
+    //    face detection
     private void init() {
         statusMata = findViewById(R.id.tv_mata);
         kondisi = findViewById(R.id.tv_kondisi);
@@ -245,8 +276,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return;
             }
             cameraSource.start();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Toast.makeText(MapsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
@@ -268,8 +298,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     return;
                 }
                 cameraSource.start();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -278,7 +307,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onPause() {
         super.onPause();
-        if (cameraSource!=null) {
+        if (cameraSource != null) {
             cameraSource.stop();
         }
 
@@ -288,26 +317,63 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (cameraSource!=null) {
+        if (cameraSource != null) {
             cameraSource.release();
         }
     }
 
     //update view
-    public void updateMainView(Condition condition){
-        switch (condition){
+    public void updateMainView(Condition condition) {
+        switch (condition) {
             case USER_EYES_OPEN:
-                statusMata.setText("Mata Terdeteksi Terbuka");
+                curenttime = System.currentTimeMillis();
+//                Log.d("Status Mata", "Terbuka");
+//                statusMata.setText("Mata Terdeteksi Terbuka");
+                stopAlarm();
                 break;
             case USER_EYES_CLOSED:
-                statusMata.setText("Mata Terdeteksi Tertutup");
+                lastUpdate = System.currentTimeMillis();
+                Log.d("Status Mata", "Tertutup");
+
+                if (lastUpdate >= (curenttime + interval)) {
+//                    Log.d("Status current", String.valueOf(curenttime));
+//                    Log.d("Status last", String.valueOf(lastUpdate));
+//                    Log.d("Status Mata", "Alarm");
+                    playAlarm();
+
+                } else {
+                    Log.d("else close", String.valueOf(lastUpdate));
+                }
                 break;
             case FACE_NOT_FOUND:
-                statusMata.setText("Mata Tidak Terdeteksi");
+                stopAlarm();
+                Log.d("Status Mata", "Tidak Terdeteksi");
+//                statusMata.setText("Mata Tidak Terdeteksi");
                 break;
             default:
-                statusMata.setText("Mata Tidak Terdeteksi");
+//                statusMata.setText("Mata Tidak Terdeteksi");
         }
     }
 
+    public void playAlarm() {
+
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
+        }
+        mediaPlayer.start();
+    }
+
+    public void stopAlarm() {
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopAlarm();
+    }
 }

@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="REGISTER"
+            android:text="Daftar"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
@@ -31,126 +31,147 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:gravity="center">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etnama"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="14dp"
-                android:layout_marginRight="14dp"
+                android:layout_height="50dp"
                 android:background="@color/white"
                 android:hint="Nama Lengkap"
-                android:importantForAutofill="no"
                 android:inputType="textPersonName"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
                 android:textSize="20sp" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/etnowa"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="14dp"
-                android:layout_marginRight="14dp"
-                android:background="@color/white"
-                android:hint="No WA"
-                android:importantForAutofill="no"
-                android:inputType="number"
-                android:textSize="20sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/register_etemail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="14dp"
-                android:layout_marginRight="14dp"
-                android:background="@color/white"
-                android:hint="Email"
-                android:importantForAutofill="no"
-                android:inputType="textEmailAddress"
-                android:textSize="20sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Spinner
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp"
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:id="@+id/spinner"/>
         <View
             android:layout_width="match_parent"
+            android:layout_height="1dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:background="#7f8280" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:gravity="center">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etnowa"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:hint="No Whatsapp"
+                android:inputType="number"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:textSize="20sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <View
+            android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="#7f8280" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:gravity="center">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etemail"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:textSize="20sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="#7f8280" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:background="#7f8280">
 
         </View>
 
-        <LinearLayout
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:hint="Password"
+            app:passwordToggleEnabled="true">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/register_etpassword"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Password"
-                app:passwordToggleEnabled="true"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1">
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:background="@color/white"
+                android:inputType="textPassword" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/register_etpassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="#7f8280" />
 
-
-        </LinearLayout>
-
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:hint="Ulangi Password"
+            app:passwordToggleEnabled="true">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/register_etrepassword"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ulangi Password"
-                app:passwordToggleEnabled="true"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1">
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:background="@color/white"
+                android:inputType="textPassword" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/register_etrepassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="#7f8280" />
 
         <LinearLayout
             android:layout_width="match_parent"
