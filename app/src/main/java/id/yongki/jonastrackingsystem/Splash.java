@@ -18,10 +18,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import id.yongki.jonastrackingsystem.model.UserModel;
+
 public class Splash extends AppCompatActivity {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser mUser = firebaseAuth.getCurrentUser();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,12 +50,17 @@ public class Splash extends AppCompatActivity {
                                     final UserModel userModel = new UserModel(
                                             (String) documentSnapshot.get("nama"),
                                             (String) documentSnapshot.get("nowa"),
-                                            (String) documentSnapshot.get("jabatan")
+                                            (String) documentSnapshot.get("jabatan"),
+                                            (String) documentSnapshot.get("status")
                                     );
-                                    if(userModel.jabatan.equals("Admin")){
-                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    if(userModel.status.equals("aktif")){
+                                        if(userModel.jabatan.equals("Admin")){
+                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                        }else{
+                                            startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                                        }
                                     }else{
-                                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                                        Toast.makeText(getApplicationContext(), "Status anda belum aktif, Hubungi admin", Toast.LENGTH_LONG).show();
                                     }
                                 }
                             }else {

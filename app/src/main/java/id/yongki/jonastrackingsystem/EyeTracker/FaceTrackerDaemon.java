@@ -1,4 +1,4 @@
-package id.yongki.jonastrackingsystem;
+package id.yongki.jonastrackingsystem.EyeTracker;
 
 import android.content.Context;
 

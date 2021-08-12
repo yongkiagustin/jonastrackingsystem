@@ -3,7 +3,6 @@ package id.yongki.jonastrackingsystem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -11,23 +10,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.AssetFileDescriptor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +34,7 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -49,15 +42,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import static java.security.AccessController.getContext;
+import id.yongki.jonastrackingsystem.EyeTracker.Condition;
+import id.yongki.jonastrackingsystem.EyeTracker.FaceTrackerDaemon;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mMap;
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    FirebaseUser mUser = firebaseAuth.getCurrentUser();
+    String uid = mUser.getEmail();
     private DatabaseReference reference;
     private LocationManager manager;
     private final int MIN_TIME = 1000;
@@ -65,7 +59,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final int interval = 400; //milisecond
     private MediaPlayer mediaPlayer;
     Marker myMarker;
-
     boolean flag = false;
     private TextView statusMata, kondisi;
     CameraSource cameraSource;
@@ -77,9 +70,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         manager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-        reference = FirebaseDatabase.getInstance("https://jonas-tracking-system-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference().child("Users");
-
+        reference = FirebaseDatabase.getInstance("https://jonas-tracking-system-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference().child(uid);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

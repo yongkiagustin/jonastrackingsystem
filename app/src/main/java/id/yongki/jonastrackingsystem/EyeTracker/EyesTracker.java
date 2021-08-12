@@ -1,4 +1,4 @@
-package id.yongki.jonastrackingsystem;
+package id.yongki.jonastrackingsystem.EyeTracker;
 
 import android.content.Context;
 import android.util.Log;
@@ -6,6 +6,8 @@ import android.util.Log;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.face.Face;
+
+import id.yongki.jonastrackingsystem.MapsActivity;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 

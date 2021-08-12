@@ -93,6 +93,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     user.put("nowa", gnowa);
                                     user.put("email", gemail);
                                     user.put("jabatan", gjabatan);
+                                    user.put("status", "baru");
 //                    user.put("profilePic", imageUrl);
                                     db.collection("DataUsers").document(gemail).set(user)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
