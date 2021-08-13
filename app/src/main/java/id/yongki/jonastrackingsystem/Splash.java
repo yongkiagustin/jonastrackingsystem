@@ -24,7 +24,7 @@ public class Splash extends AppCompatActivity {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser mUser = firebaseAuth.getCurrentUser();
-
+    public static final String EXTRA_MESSAGE = "id.yongki.jonastrackingsystem.MESSAGE";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,37 +38,46 @@ public class Splash extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                     finish();
                 } else {
-                    String uid = mUser.getEmail();
-                    Log.d("USER",uid);
-                    final DocumentReference docRef = db.collection("DataUsers").document(uid);
-                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if(task.isSuccessful()){
-                                DocumentSnapshot documentSnapshot = task.getResult();
-                                if (documentSnapshot.exists()){
-                                    final UserModel userModel = new UserModel(
-                                            (String) documentSnapshot.get("nama"),
-                                            (String) documentSnapshot.get("nowa"),
-                                            (String) documentSnapshot.get("jabatan"),
-                                            (String) documentSnapshot.get("status")
-                                    );
-                                    if(userModel.status.equals("aktif")){
-                                        if(userModel.jabatan.equals("Admin")){
-                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                        }else{
-                                            startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-                                        }
-                                    }else{
-                                        Toast.makeText(getApplicationContext(), "Status anda belum aktif, Hubungi admin", Toast.LENGTH_LONG).show();
-                                    }
-                                }
-                            }else {
-                                Toast.makeText(getApplicationContext(), "Terjadi Error, Mohon Coba Kembali", Toast.LENGTH_LONG).show();
-                            }
-
-                        }
-                    });
+                    startActivity(new Intent(getApplicationContext(), PraLoginActivity.class));
+                    finish();
+//                    String uid = mUser.getEmail();
+////                    Log.d("USER",uid);
+//                    final DocumentReference docRef = db.collection("DataUsers").document(uid);
+//                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                            if(task.isSuccessful()){
+//                                DocumentSnapshot documentSnapshot = task.getResult();
+//                                if (documentSnapshot.exists()){
+//                                    final UserModel userModel = new UserModel(
+//                                            (String) documentSnapshot.get("nama"),
+//                                            (String) documentSnapshot.get("username"),
+//                                            (String) documentSnapshot.get("email"),
+//                                            (String) documentSnapshot.get("nowa"),
+//                                            (String) documentSnapshot.get("jabatan"),
+//                                            (String) documentSnapshot.get("status")
+//                                    );
+//                                    if(userModel.status.equals("aktif")){
+//                                        if(userModel.jabatan.equals("Admin")){
+//                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+//                                            finish();
+//                                        }else{
+//                                            Intent intent = new Intent(Splash.this, MapsActivity.class);
+//                                            intent.putExtra(EXTRA_MESSAGE, userModel.username);
+//                                            Log.d("username extra", EXTRA_MESSAGE);
+//                                            startActivity(intent);
+//                                            finish();
+//                                        }
+//                                    }else{
+//                                        Toast.makeText(getApplicationContext(), "Status anda belum aktif, Hubungi admin", Toast.LENGTH_LONG).show();
+//                                    }
+//                                }
+//                            }else {
+//                                Toast.makeText(getApplicationContext(), "Terjadi Error, Mohon Coba Kembali", Toast.LENGTH_LONG).show();
+//                            }
+//
+//                        }
+//                    });
 
                 }
             }

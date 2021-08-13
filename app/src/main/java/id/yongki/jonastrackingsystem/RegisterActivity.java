@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
-    private EditText etnama,etnowa,etemail, etpassword, etrepassword;
+    private EditText etnama,etusername, etnowa,etemail, etpassword, etrepassword;
     private ProgressBar progressBar;
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -45,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.register_progressbar);
         Button regisBtn = findViewById(R.id.register_regisbtn);
         etnama = findViewById(R.id.etnama);
+        etusername = findViewById(R.id.etusername);
         etnowa = findViewById(R.id.etnowa);
         etemail = findViewById(R.id.etemail);
         etpassword = findViewById(R.id.register_etpassword);
@@ -60,6 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String gnama = etnama.getText().toString();
+                String gusername = etusername.getText().toString();
                 String gnowa = etnowa.getText().toString();
                 String gjabatan = spin.getSelectedItem().toString();
                 final String gemail = etemail.getText().toString();
@@ -90,6 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     //membuat data user ke firestore
                                     Map<String, Object> user = new HashMap<>();
                                     user.put("nama", gnama);
+                                    user.put("username", gusername);
                                     user.put("nowa", gnowa);
                                     user.put("email", gemail);
                                     user.put("jabatan", gjabatan);

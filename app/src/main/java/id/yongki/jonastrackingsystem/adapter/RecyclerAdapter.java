@@ -29,14 +29,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
         public MyViewHolder(View v, OnItemListener onItemListener) {
             super(v);
-
             nama = (TextView) v.findViewById(R.id.rv_labelnama);
             jabatan = (TextView) v.findViewById(R.id.rv_labeljabatan);
             nowa = (TextView) v.findViewById(R.id.rv_nowa);
             cardView = (CardView) v.findViewById(R.id.rc_cardview);
             no = (TextView)v.findViewById(R.id.rc_label_no);
             this.onItemListener = onItemListener;
-
             cardView.setOnClickListener(this);
         }
 
@@ -56,7 +54,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recyclerview_layout, parent, false);
-
         return new MyViewHolder(itemView, mOnItemListener);
     }
 

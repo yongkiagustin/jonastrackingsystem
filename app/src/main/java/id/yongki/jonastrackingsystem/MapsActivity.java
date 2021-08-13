@@ -30,6 +30,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.face.FaceDetector;
@@ -40,19 +42,25 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.io.IOException;
 
 import id.yongki.jonastrackingsystem.EyeTracker.Condition;
 import id.yongki.jonastrackingsystem.EyeTracker.FaceTrackerDaemon;
 
+import static id.yongki.jonastrackingsystem.PraLoginActivity.USERNAME_PRA;
+
+
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mMap;
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    FirebaseUser mUser = firebaseAuth.getCurrentUser();
-    String uid = mUser.getEmail();
+
+
+
     private DatabaseReference reference;
+    private DocumentReference docRef;
     private LocationManager manager;
     private final int MIN_TIME = 1000;
     private final int MIN_DISTANCE = 1; //meter
@@ -69,11 +77,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        Intent i = getIntent();
+        String ussr = i.getStringExtra(USERNAME_PRA);
+        Log.d("ussr",ussr);
+
         manager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        reference = FirebaseDatabase.getInstance("https://jonas-tracking-system-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference().child(uid);
+        reference = FirebaseDatabase.getInstance("https://jonas-tracking-system-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference().child(ussr);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        mapFragment.getMapAsync(MapsActivity.this);
 
         getLocationUpdate();
         readChanges();
@@ -94,6 +106,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         final AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         int a = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)(a), 0);
+
 
     }
 

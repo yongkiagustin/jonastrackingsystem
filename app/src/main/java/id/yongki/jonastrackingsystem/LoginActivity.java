@@ -32,7 +32,6 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ProgressBar progressBar;
     private EditText etEmail, etPassword;
-    boolean isPlay = false;
     private TextView daftar, lupaPassword;
 
     @Override
