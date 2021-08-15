@@ -39,14 +39,11 @@ import static id.yongki.jonastrackingsystem.MainActivity.NAMA;
 import static id.yongki.jonastrackingsystem.MainActivity.NOWA;
 import static id.yongki.jonastrackingsystem.MainActivity.USERNAME;
 
-public class DetailDriver extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+public class DetailDriver extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private DatabaseReference reference;
     private LocationManager manager;
-    private final int MIN_TIME = 1000;
-    private final int MIN_DISTANCE = 1; //meter
-    private static final int interval = 400; //milisecond
     Marker myMarker;
     TextView mNama;
     Button wabutton, telbutton;
@@ -59,8 +56,6 @@ public class DetailDriver extends AppCompatActivity implements OnMapReadyCallbac
         String username = intent.getStringExtra(USERNAME);
         String nowa = intent.getStringExtra(NOWA);
         String nama = intent.getStringExtra(NAMA);
-        Log.d("Detail Email",email);
-        Log.d("Detail Username",username);
 
 
 
@@ -70,9 +65,9 @@ public class DetailDriver extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map_driver);
         mapFragment.getMapAsync(DetailDriver.this);
 
-        getLocationUpdate();
         readChanges();
 
+        Log.d("username",username);
 
         mNama = findViewById(R.id.tv_nama);
         mNama.setText(nama);
@@ -120,7 +115,10 @@ public class DetailDriver extends AppCompatActivity implements OnMapReadyCallbac
                     } catch (Exception e) {
                         Toast.makeText(DetailDriver.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
+                }else{
+                    Log.d("data tidak ada","data tidak ada");
                 }
+
             }
 
             @Override
@@ -128,57 +126,6 @@ public class DetailDriver extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
-    private void getLocationUpdate() {
-        if (manager != null) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
-                } else if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                    manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
-
-                } else {
-                    AlertDialog alertDialog = new AlertDialog.Builder(DetailDriver.this).create();
-                    alertDialog.setTitle("GPS Tidak Aktif");
-                    alertDialog.setMessage("Mohon Aktifkan GPS Anda");
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-                                    finish();
-                                }
-                            });
-                    alertDialog.show();
-                }
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
-            }
-
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 101) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLocationUpdate();
-            } else {
-                Toast.makeText(this, "Permission Required", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -196,18 +143,5 @@ public class DetailDriver extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        if (location != null) {
-            saveLocation(location);
-
-        } else {
-            Toast.makeText(this, "Tidak Ada Lokasi", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void saveLocation(Location location) {
-        reference.setValue(location);
-    }
 
 }

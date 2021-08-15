@@ -35,10 +35,10 @@
  import id.yongki.jonastrackingsystem.model.UserModel;
 
  public class MainActivity extends AppCompatActivity implements RecyclerAdapter.OnItemListener {
-     public static final String EMAIL = "id.yongki.jonastrackingsystem.MESSAGE";
-     public static final String USERNAME = "id.yongki.jonastrackingsystem.MESSAGE";
-     public static final String NOWA = "id.yongki.jonastrackingsystem.MESSAGE";
-     public static final String NAMA = "id.yongki.jonastrackingsystem.MESSAGE";
+     public static final String EMAIL = "id.yongki.jonastrackingsystem.EMAIL";
+     public static final String USERNAME = "id.yongki.jonastrackingsystem.USERNAME";
+     public static final String NOWA = "id.yongki.jonastrackingsystem.NOWA";
+     public static final String NAMA = "id.yongki.jonastrackingsystem.NAMA";
      FirebaseAuth firebaseAuth;
      TextView label;
      ArrayList<UserModel> usersList = new ArrayList<>();
