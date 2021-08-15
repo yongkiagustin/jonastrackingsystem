@@ -23,7 +23,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView nama, jabatan, nowa,no;
+        TextView nama, jabatan, status,no;
         CardView cardView;
         OnItemListener onItemListener;
 
@@ -31,7 +31,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             super(v);
             nama = (TextView) v.findViewById(R.id.rv_labelnama);
             jabatan = (TextView) v.findViewById(R.id.rv_labeljabatan);
-            nowa = (TextView) v.findViewById(R.id.rv_nowa);
+            status = (TextView) v.findViewById(R.id.rv_status);
             cardView = (CardView) v.findViewById(R.id.rc_cardview);
             no = (TextView)v.findViewById(R.id.rc_label_no);
             this.onItemListener = onItemListener;
@@ -62,7 +62,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         final UserModel album = albumList.get(position);
         holder.nama.setText(album.nama);
         holder.jabatan.setText(album.jabatan);
-        holder.nowa.setText(album.nowa);
+        holder.status.setText(album.status);
         holder.no.setText(String.valueOf(position+1));
     }
 

@@ -60,7 +60,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     private DatabaseReference reference;
-    private DocumentReference docRef;
     private LocationManager manager;
     private final int MIN_TIME = 1000;
     private final int MIN_DISTANCE = 1; //meter

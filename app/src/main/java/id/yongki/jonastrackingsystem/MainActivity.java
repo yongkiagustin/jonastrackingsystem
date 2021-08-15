@@ -37,6 +37,8 @@
  public class MainActivity extends AppCompatActivity implements RecyclerAdapter.OnItemListener {
      public static final String EMAIL = "id.yongki.jonastrackingsystem.MESSAGE";
      public static final String USERNAME = "id.yongki.jonastrackingsystem.MESSAGE";
+     public static final String NOWA = "id.yongki.jonastrackingsystem.MESSAGE";
+     public static final String NAMA = "id.yongki.jonastrackingsystem.MESSAGE";
      FirebaseAuth firebaseAuth;
      TextView label;
      ArrayList<UserModel> usersList = new ArrayList<>();
@@ -80,7 +82,7 @@
 
      private void readData() {
          db.collection("DataUsers")
-                 .whereEqualTo("status", "aktif")
+                 .whereEqualTo("jabatan", "Driver")
                  .orderBy("nama", Query.Direction.ASCENDING)
                  .limit(PAGE_SIZE)
                  .get()
@@ -130,7 +132,7 @@
                                          if (isScrolling && (firstVisibleItem + visibleItemCount == totalItemCount) && !isLastItemReached) {
                                              isScrolling = false;
                                              db.collection("DataUsers")
-                                                     .whereEqualTo("status", "aktif").orderBy("nama", Query.Direction.ASCENDING).startAfter(lastVisible).limit(10)
+                                                     .whereEqualTo("jabatan", "Driver").orderBy("nama", Query.Direction.ASCENDING).startAfter(lastVisible).limit(10)
                                                      .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                  @Override
                                                  public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -197,6 +199,8 @@
          Intent intent = new Intent(getApplicationContext(), DetailDriver.class);
          intent.putExtra(EMAIL, usersList.get(position).email);
          intent.putExtra(USERNAME, usersList.get(position).username);
+         intent.putExtra(NOWA, usersList.get(position).nowa);
+         intent.putExtra(NAMA, usersList.get(position).nama);
          startActivity(intent);
      }
  }

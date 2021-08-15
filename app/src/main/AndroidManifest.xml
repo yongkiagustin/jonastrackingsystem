@@ -15,12 +15,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.JonasTrackingSystem">
-        <activity android:name=".DetailDriver"/>
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".DetailDriver"
+            android:label="Detail Driver"/>
+        <activity android:name=".MainActivity"
+            android:label="List Driver"/>
         <activity
             android:name=".PraLoginActivity"
             android:theme="@style/Theme.JonasTrackingSystem.NoActionBar" />
-        <activity android:name=".ProfileActivity" />
+        <activity android:name=".ProfileActivity"
+            android:label="Profil Saya"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

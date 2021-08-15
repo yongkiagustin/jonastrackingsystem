@@ -69,7 +69,9 @@ public class PraLoginActivity extends AppCompatActivity {
     }
 }
 
-//TODO membuat fungsi deteksi kantuk
-//TODO benerin MapsActivity masih belum muncul action barnya
-//TODO map dengan mlkit masih bentrok dependenciesnya
-//TODO membuat tampilan untuk admin
+//TODO membuat fungsi deteksi kantuk : DONE
+//TODO benerin MapsActivity masih belum muncul action barnya : DONE
+//TODO map dengan mlkit masih bentrok dependenciesnya : DONE
+//TODO membuat tampilan untuk admin : DONE
+// TODO map detail driver belum seharusnya
+// TODO membuat tampilan my profil
